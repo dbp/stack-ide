@@ -198,10 +198,12 @@ Can be either:
 reload targets on start-up, so that's the default command we'll
 start with."
   (setq stack-mode-current-command
-        (list :json nil
-              :data nil
-              :cont 'stack-mode-loading-callback
-              :label nil))
+        nil
+        ;; (list :json nil
+        ;;       :data nil
+        ;;       :cont 'stack-mode-loading-callback
+        ;;       :label nil)
+        )
   (setq stack-mode-queue (stack-fifo-make))
   (stack-mode-log "Set initial command."))
 
