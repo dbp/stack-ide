@@ -357,7 +357,7 @@ Run `M-x stack-mode-list-loaded-modules' to see what's loaded.")))
          (idName (stack-lookup 'idName prop)))
     (let ((info-string (concat
                         "Identifier: " (haskell-fontify-as-mode idName 'haskell-mode) "\n"
-                        "Type: " (haskell-fontify-as-mode idType 'haskell-mode) "\n"
+                        (if idType (concat "Type: " (haskell-fontify-as-mode idType 'haskell-mode) "\n") "")
                         "Module: " (haskell-fontify-as-mode moduleName 'haskell-mode) "\n"
                         "Package: "  (if (string= "main" packageKey)
                                          "(this one)"
