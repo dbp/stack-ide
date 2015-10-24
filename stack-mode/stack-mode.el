@@ -337,34 +337,35 @@ Run `M-x stack-mode-list-loaded-modules' to see what's loaded.")))
                 module-name
                 (with-current-buffer (stack-mode-buffer)
                   (file-relative-name filename default-directory))
-                span))
-         (info-contents (stack-contents (elt (elt (stack-contents info) 0) 0)))
-         (scope (stack-lookup 'idScope info-contents))
-         (prop (stack-lookup 'idProp info-contents))
-         (qual (stack-lookup 'idImportQual scope))
-         (from (stack-lookup 'idImportedFrom scope))
-         (span (stack-lookup 'idImportSpan scope))
+                span)))
+    (if (/= (length (stack-contents info)) 0)
+        (let* ((info-contents (stack-contents (elt (elt (stack-contents info) 0) 0)))
+               (scope (stack-lookup 'idScope info-contents))
+               (prop (stack-lookup 'idProp info-contents))
+               (qual (stack-lookup 'idImportQual scope))
+               (from (stack-lookup 'idImportedFrom scope))
+               (span (stack-lookup 'idImportSpan scope))
 
-         (space (stack-lookup 'idSpace prop))
-         (idDefSpan (stack-lookup 'idDefSpan prop))
-         (idDefinedIn (stack-lookup 'idDefinedIn prop))
-         (modulePackage (stack-lookup 'modulePackage idDefinedIn))
-         (moduleName (stack-lookup 'moduleName idDefinedIn))
-         (packageVersion (stack-lookup 'packageVersion modulePackage))
-         (packageKey (stack-lookup 'packageKey modulePackage))
-         (packageName (stack-lookup 'packageName modulePackage))
-         (idType (stack-lookup 'idType prop))
-         (idName (stack-lookup 'idName prop)))
-    (let ((info-string (concat
-                        "Identifier: " (haskell-fontify-as-mode idName 'haskell-mode) "\n"
-                        (if idType (concat "Type: " (haskell-fontify-as-mode idType 'haskell-mode) "\n") "")
-                        "Module: " (haskell-fontify-as-mode moduleName 'haskell-mode) "\n"
-                        "Package: "  (if (string= "main" packageKey)
-                                         "(this one)"
-                                       packageName))))
-      (cond ((and stack-mode-show-popup (fboundp 'popup-tip))
-             (popup-tip info-string))
-            (t (message info-string))))))
+               (space (stack-lookup 'idSpace prop))
+               (idDefSpan (stack-lookup 'idDefSpan prop))
+               (idDefinedIn (stack-lookup 'idDefinedIn prop))
+               (modulePackage (stack-lookup 'modulePackage idDefinedIn))
+               (moduleName (stack-lookup 'moduleName idDefinedIn))
+               (packageVersion (stack-lookup 'packageVersion modulePackage))
+               (packageKey (stack-lookup 'packageKey modulePackage))
+               (packageName (stack-lookup 'packageName modulePackage))
+               (idType (stack-lookup 'idType prop))
+               (idName (stack-lookup 'idName prop)))
+          (let ((info-string (concat
+                              "Identifier: " (haskell-fontify-as-mode idName 'haskell-mode) "\n"
+                              (if idType (concat "Type: " (haskell-fontify-as-mode idType 'haskell-mode) "\n") "")
+                              "Module: " (haskell-fontify-as-mode moduleName 'haskell-mode) "\n"
+                              "Package: "  (if (string= "main" packageKey)
+                                               "(this one)"
+                                             packageName))))
+            (cond ((and stack-mode-show-popup (fboundp 'popup-tip))
+                   (popup-tip info-string))
+                  (t (message info-string))))))))
 
 (defun stack-mode-type (&optional insert-value)
   "Display type info of thing at point."
